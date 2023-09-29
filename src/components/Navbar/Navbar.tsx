@@ -7,7 +7,7 @@ export default function Navbar() {
 
   const Links = [
     { name: "ACCUEIL", link: "/" },
-    { name: "NOS VINS", link: "wines" },
+    { name: "NOS VINS", link: "ourWines" },
     { name: "CONTACT", link: "contact" },
   ];
   return (
