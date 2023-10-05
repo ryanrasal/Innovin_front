@@ -2,7 +2,7 @@ const ApiHelper = async (
   route: string,
   method: string,
   data = null,
-  format = "application/json"
+  format = "application/json",
 ) => {
   const apiUrl = `http://localhost:5000/${route}`;
   const headers: HeadersInit = {

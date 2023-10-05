@@ -1,12 +1,16 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
+import { ToastContainer } from "react-toastify";
+import { UserProvider } from "../services/Context/UserContext";
 
 export default function Root() {
   return (
     <>
-      <Navbar />
-      <Outlet />
+      <UserProvider>
+        <Navbar />
+        <Outlet />
+        <ToastContainer />
+      </UserProvider>
     </>
   );
 }

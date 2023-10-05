@@ -1,17 +1,31 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
+import { useUserContext } from "../../services/Context/UserContext";
+import ModaleLogout from "./ModalLogout";
 
 export default function Navbar() {
+  const [showModalConfirm, setShowModalConfirme] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user } = useUserContext();
+  const navigate = useNavigate();
 
   const Links = [
-    { name: "ACCUEIL", link: "/" },
-    { name: "NOS VINS", link: "ourWines" },
-    { name: "CONTACT", link: "contact" },
+    { name: "Accueil", link: "/" },
+    { name: "Nos vins", link: "ourWines" },
+    { name: "Contact", link: "contact" },
   ];
+
+  const handleDeconnected = () => {
+    setShowModalConfirme(false);
+    setOpen(!open);
+    localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
+
   return (
-    <div className="shadow-md w-full md:h-[10vh] md:fixed md:top-0">
+    <div className="shadow-md w-full h-[10vh]">
       <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
         <div
           className="font-bold text-2xl cursor-pointer flex items-center font-[Poppins] 
@@ -37,13 +51,72 @@ export default function Navbar() {
               <NavLink
                 to={link.link}
                 onClick={() => setOpen(!open)}
-                className="text-gray-800 hover:text-gray-600 duration-300 hover:border-b hover:border-black"
+                className="text-gray-800 hover:text-gray-600 hover:border-b hover:border-red-500 duration-300"
               >
                 {link.name}
               </NavLink>
             </li>
           ))}
+          {!user ? (
+            <li className="md:ml-8 text-xl md:my-0 my-7">
+              <NavLink
+                onClick={() => setOpen(!open)}
+                to="login"
+                className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+              >
+                Connexion
+              </NavLink>
+            </li>
+          ) : user.role === "admin" ? (
+            <>
+              <li className="md:ml-8 text-xl md:my-0 my-7">
+                <NavLink
+                  onClick={() => setOpen(!open)}
+                  to="/admin"
+                  className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+                >
+                  Admin
+                </NavLink>
+              </li>
+              <li className="md:ml-8 text-xl md:my-0 my-7">
+                <button
+                  onClick={handleDeconnected}
+                  type="button"
+                  className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+                >
+                  Deconnexion
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="md:ml-8 text-xl md:my-0 my-7">
+                <NavLink
+                  onClick={() => setOpen(!open)}
+                  to="/cart"
+                  className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+                >
+                  Panier
+                </NavLink>
+              </li>
+              <li className="md:ml-8 text-xl md:my-0 my-7">
+                <button
+                  onClick={() => setShowModalConfirme(true)}
+                  type="button"
+                  className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+                >
+                  Deconnexion
+                </button>
+              </li>
+            </>
+          )}
         </ul>
+        {showModalConfirm && (
+          <ModaleLogout
+            setShowModalConfirme={setShowModalConfirme}
+            handleDeconnected={handleDeconnected}
+          />
+        )}
       </div>
     </div>
   );

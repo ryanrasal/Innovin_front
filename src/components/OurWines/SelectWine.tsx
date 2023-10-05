@@ -1,3 +1,5 @@
+import React from "react";
+
 interface Props {
   setType: (type: string) => void;
 }
@@ -12,16 +14,16 @@ export default function SelectWine({ setType }: Props) {
         <option value="" className=" sm:text-sm md:text-lg">
           Type de vin
         </option>
-        <option value="Blanc" className=" sm:text-sm md:text-lg">
+        <option value="blanc" className=" sm:text-sm md:text-lg">
           Blanc
         </option>
-        <option value="Rouge" className=" sm:text-sm md:text-lg">
+        <option value="rouge" className=" sm:text-sm md:text-lg">
           Rouge
         </option>
-        <option value="Rosé" className=" sm:text-sm md:text-lg">
+        <option value="rosé" className=" sm:text-sm md:text-lg">
           Rosé
         </option>
-        <option value="Champagne" className=" sm:text-sm md:text-lg">
+        <option value="champagne" className=" sm:text-sm md:text-lg">
           Champagne
         </option>
       </select>
