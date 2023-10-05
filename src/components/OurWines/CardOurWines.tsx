@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 
 const { VITE_BACKEND_URL } = import.meta.env;

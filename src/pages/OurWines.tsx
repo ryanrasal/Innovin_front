@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import CardOurWines from "../components/OurWines/CardOurWines";
 import SelectWine from "../components/OurWines/SelectWine";
-import ApiHelper from "../services/apiHelper";
+
+const { VITE_BACKEND_URL } = import.meta.env;
 
 interface Wine {
   id: number;
@@ -18,13 +19,14 @@ interface Wine {
 }
 
 export default function OurWines() {
-  const [wines, setWines] = useState<Wine[]>([]);
   const [type, setType] = useState<string>("");
 
+  const [data, setData] = useState<null | Wine[]>(null);
+
   useEffect(() => {
-    ApiHelper("wines", "get").then((data) => {
-      setWines(data);
-    });
+    fetch(`${VITE_BACKEND_URL}` + `wines`)
+      .then((response) => response.json())
+      .then((reponseData) => setData(reponseData));
   }, []);
 
   return (
@@ -33,13 +35,13 @@ export default function OurWines() {
         Nos vins
       </h4>
       <SelectWine setType={setType} />
-      {wines.length > 0 && (
+      {data && data?.length > 0 && (
         <div className="md:grid md:grid-cols-4 md:gap-10 ">
-          {wines
-            .filter((wine) => {
+          {data
+            ?.filter((wine: Wine) => {
               return type === "" ? wine : wine?.wine_type?.includes(type);
             })
-            .map((wine) => (
+            .map((wine: Wine) => (
               <div key={wine.id}>
                 <CardOurWines wine={wine} />
               </div>

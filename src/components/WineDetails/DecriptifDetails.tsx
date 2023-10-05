@@ -1,8 +1,26 @@
+import React from "react";
 
+interface Wine {
+  id: number;
+  best_seller: number;
+  description: string;
+  grape_variety: string;
+  image: string;
+  name: string;
+  origin_country: string;
+  price: number;
+  region: string;
+  wine_type: string;
+  year: number;
+}
 
-export default function DescriptifDetails({ wineDetail }) {
-  const keysWine = Object.keys(wineDetail);
-  const valuesWine = Object.values(wineDetail);
+interface Props {
+  data: Wine;
+}
+
+export default function DescriptifDetails({ data }: Props) {
+  const keysWine = Object.keys(data);
+  const valuesWine = Object.values(data);
 
   return (
     <div className="mx-[5vw]">
@@ -31,4 +49,3 @@ export default function DescriptifDetails({ wineDetail }) {
     </div>
   );
 }
-
