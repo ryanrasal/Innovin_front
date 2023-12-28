@@ -1,5 +1,5 @@
 import { Eye, EyeOff } from "lucide-react";
-import React from "react";
+import { Button } from "../ui/button";
 
 interface Props {
   connexion: () => void;
@@ -17,7 +17,7 @@ export default function SignIn({
   setShowPassword,
 }: Props) {
   return (
-    <div className=" flex justify-center  w-full flex-col md:mx-20  md:w-1/2">
+    <div className=" flex justify-center w-full flex-col md:mx-20">
       <h4 className="text-center text-3xl font-bold py-5 px-10">
         Content de te revoir !
       </h4>
@@ -26,7 +26,7 @@ export default function SignIn({
           placeholder="Email"
           name="email"
           onChange={handleChangeSignIn}
-          className="border md:w-2/5 w-2/3 mx-auto my-5 py-3 rounded-md px-2 "
+          className="border md:w-2/5 w-2/3 mx-auto my-2 py-3 rounded-md px-2 "
           type="text"
         />
         <div className="flex relative">
@@ -39,19 +39,15 @@ export default function SignIn({
           />
           <button
             type="button"
-            className="absolute md:right-44 right-20 top-8 z-10"
+            className="absolute md:right-52 right-20 top-8 z-10"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <Eye /> : <EyeOff />}
           </button>
         </div>
-        <button
-          type="submit"
-          onClick={connexion}
-          className="mx-auto border md:w-2/5  w-2/3 my-5 py-3 rounded-md px-2 hover:bg-gray-100"
-        >
+        <Button onClick={connexion} variant="create" className="mx-auto mb-4">
           Se connecter
-        </button>
+        </Button>
       </div>
       <div className="flex justify-center">
         <p className=" text-center mr-2">Pas enore inscrit ?</p>
@@ -60,7 +56,7 @@ export default function SignIn({
           onClick={handleShowForm}
           className="underline  text-red-400 font-bold hover:text-red-500"
         >
-          Clique ici
+          Cliquez ici
         </button>
       </div>
     </div>

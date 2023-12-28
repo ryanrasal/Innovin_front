@@ -1,19 +1,5 @@
-import React from "react";
 import { Star } from "lucide-react";
-
-interface Wine {
-  id: number;
-  best_seller: number;
-  description: string;
-  grape_variety: string;
-  image: string;
-  name: string;
-  origin_country: string;
-  price: number;
-  region: string;
-  wine_type: string;
-  year: number;
-}
+import { Wine } from "@/interfaces/Wine";
 
 interface Props {
   data: Wine;

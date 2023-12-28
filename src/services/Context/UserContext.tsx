@@ -1,6 +1,5 @@
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, {
+import { User } from "@/interfaces/User";
+import  {
   createContext,
   useContext,
   useEffect,
@@ -9,18 +8,6 @@ import React, {
   useMemo,
 } from "react";
 
-// Interface pour l'objet utilisateur
-interface User {
-  id: number;
-  firstname: string;
-  lastname: string;
-  username: string;
-  role: string;
-  email: string;
-  password: string;
-  address: string;
-  phone: string;
-}
 
 // Interface pour le contexte
 interface UserContextType {
