@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { ToastContainer } from "react-toastify";
 import { UserProvider } from "../services/Context/UserContext";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
@@ -34,7 +33,6 @@ export default function Root() {
           <div>
             <Navbar />
             <Outlet />
-            <ToastContainer />
             <Toaster />
           </div>
         )}

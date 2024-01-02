@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApiHelper from "@/services/apiHelper";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Wine {
   key: string;
@@ -11,8 +12,11 @@ interface Wine {
 }
 
 export default function AdminUpdateWine() {
+  const { toast } = useToast();
   const { id } = useParams();
+  const navigate = useNavigate()
   const [wine, setWine] = useState();
+  const [reloadWine, setReloadWine] = useState(false);
   const [dataFormWine, setDataFormWine] = useState<Wine>({
     name: "",
     year: "",
@@ -21,6 +25,7 @@ export default function AdminUpdateWine() {
     region: "",
     description: "",
     price: "",
+    quantity:"",
     image: "",
   });
 
@@ -35,10 +40,11 @@ export default function AdminUpdateWine() {
         region: response?.region || "",
         description: response?.description || "",
         price: response?.price || "",
+        quantity: response?.quantity || "",
         image: response?.image || "",
       });
     });
-  }, [id]);
+  }, [id, reloadWine]);
 
   const wineInformations = [
     {
@@ -62,6 +68,11 @@ export default function AdminUpdateWine() {
       key: "price",
     },
     {
+      label: "Quantité",
+      placeholder: wine?.quantity,
+      key: "quantity",
+    },
+    {
       label: "Région",
       placeholder: wine?.region,
       key: "region",
@@ -83,9 +94,33 @@ export default function AdminUpdateWine() {
     },
   ];
 
+  const ChangeInfoWine = (label: string, value: string) => {
+    setDataFormWine((prevData) => ({
+      ...prevData,
+      [label]: value,
+    }));
+  };
+
+  const onSubmit = () => {
+    ApiHelper(`wines/${id}`, "PUT", dataFormWine)
+      .then((res) => {
+        console.warn("je suis res", res)
+        if (res.status === 200) {
+          toast({
+            title: "Succès",
+            description: "Le vin à bien été modifié",
+          });
+          navigate("/admin/adminWine")
+        }
+      })
+      .catch((error) => console.warn(error));
+  };
+
   return (
     <div>
-        <h2 className="text-center uppercase my-5 text-2xl">Modification du vin</h2>
+      <h2 className="text-center uppercase my-5 text-2xl">
+        Modification du vin
+      </h2>
       <div className="px-20  grid grid-cols-3 gap-10">
         {wineInformations?.map((item: Wine, indexInformation: number) => (
           <div key={indexInformation} className="my-2">
@@ -94,17 +129,16 @@ export default function AdminUpdateWine() {
             ) : (
               <div>
                 <label>{item.label}</label>
-                <Input placeholder={item.placeholder} />
+                <Input
+                  placeholder={item.placeholder}
+                  onChange={(e) => ChangeInfoWine(item.key, e.target.value)}
+                />
               </div>
             )}
           </div>
         ))}
       </div>
-      <Button
-        variant="outline"
-        onClick={() => console.warn(dataFormWine)}
-        className="mx-20 my-10"
-      >
+      <Button variant="outline" onClick={onSubmit} className="mx-20 my-10">
         Enregistrer
       </Button>
     </div>

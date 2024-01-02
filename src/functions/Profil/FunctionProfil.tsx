@@ -93,7 +93,6 @@ export function useFunctionProfil() {
     const onSubmit = () => {
       ApiHelper(`users/${user?.id}`, "PUT", dataFormUser)
         .then((res) => {
-          console.log("API Response:", res);
           if (res.status === 409) {
             toast({
               variant: "destructive",

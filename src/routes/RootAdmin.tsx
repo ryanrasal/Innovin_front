@@ -1,7 +1,6 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "@/components/ui/toaster";
 import { UserProvider } from "../services/Context/UserContext";
 import SideBar from "../components/Admin/SideBar";
 
@@ -14,8 +13,7 @@ export default function RootAdmin() {
           <SideBar />
           <Outlet />
         </div>
-
-        <ToastContainer />
+        <Toaster/>
       </UserProvider>
     </>
   );
