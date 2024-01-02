@@ -1,73 +1,79 @@
-import React, { useEffect, useState } from "react";
-import { useUserContext } from "../services/Context/UserContext";
-import ApiHelper from "../services/apiHelper";
-import ContentCart from "../components/Cart/ContentCart";
-
-interface CartItem {
-  cart_wine_id: number;
-  image: string;
-  name: string;
-  origin_country: string;
-  price: number;
-  quantity: number;
-  wine_id: number;
-}
-
-interface Cart {
-  id: number;
-  is_order: number;
-  user_id: number;
-  content: CartItem[];
-}
+import { useCartFunctions } from "@/functions/Cart/Cart";
+import RecapOrder from "@/components/Cart/RecapOrder";
+import { useUserContext } from "@/services/Context/UserContext";
+import { Paiement } from "@/components/Cart/Paiement";
+import StepBar from "@/components/Cart/StepBar";
+import { Button } from "@/components/ui/button";
+import Delivery from "@/components/Cart/Delivery";
+import ResumeOrder from "@/components/Cart/ResumeOrder";
 
 export default function Cart() {
+  const {
+    dataCart,
+    total,
+    toggleStepOrderNext,
+    toggleStepOrderPrev,
+    currentStep,
+    handleChangePaiement,
+    dataPaiement,
+    setDataPaiement,
+    passStepThree,
+    handleDelete,
+    modalIsOpen,
+    confirmationOrder,
+    disableButton,
+  } = useCartFunctions();
   const { user } = useUserContext();
-  const [dataCart, setDataCart] = useState<null | Cart>(null);
-  const [selectedWine, setSelectedWine] = useState(null);
-  const [reloadCart, setReloadCart] = useState(false);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      ApiHelper(`carts/${user.id}`, "get").then((res: Response) => {
-        setDataCart(res);
-      });
-    }
-  }, [user, reloadCart]);
-
-  const openModal = (item: CartItem) => {
-    setSelectedWine(item);
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const handleDelete = (id: number) => {
-    ApiHelper(`cartwines/${id}`, "delete")
-      .then(() => {
-        setReloadCart(!reloadCart);
-        closeModal();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la suppression :", error);
-      });
-  };
 
   return (
     <div>
-      {/* <button onClick={() => console.warn(dataCart)}>coucou</button> */}
-      <br />
-      <ContentCart
-        openModal={openModal}
-        closeModal={closeModal}
-        dataCart={dataCart}
-        modalIsOpen={modalIsOpen}
-        setSelectedWine={setSelectedWine}
-        selectedWine={selectedWine}
-        handleDelete={handleDelete}
-      />
+      {currentStep === 0 ? (
+        <RecapOrder
+          user={user}
+          modalIsOpen={modalIsOpen}
+          handleDelete={handleDelete}
+          total={total}
+          dataCart={dataCart}
+          toggleStepOrderNext={toggleStepOrderNext}
+        />
+      ) : (
+        <div className="my-5 mx-10">
+          <Button variant="outline" onClick={() => toggleStepOrderPrev()}>
+            Retour à l'étape précédente
+          </Button>
+        </div>
+      )}
+      {currentStep === 1 && (
+        <Paiement
+          handleChangePaiement={handleChangePaiement}
+          dataPaiement={dataPaiement}
+          setDataPaiement={setDataPaiement}
+          currentStep={currentStep}
+          passStepThree={passStepThree}
+        />
+      )}
+      {currentStep === 2 && (
+        <Delivery
+          toggleStepOrderNext={toggleStepOrderNext}
+          currentStep={currentStep}
+          user={user}
+        />
+      )}
+      {currentStep === 3 && (
+        <div className="mt-5 mx-10">
+          <hr />
+          <div className="md:w-[300px] my-5">
+            <StepBar currentStep={currentStep} />
+          </div>
+          <ResumeOrder
+          disableButton={disableButton}
+            confirmationOrder={confirmationOrder}
+            user={user}
+            total={total}
+            dataPaiement={dataPaiement}
+          />
+        </div>
+      )}
     </div>
   );
 }

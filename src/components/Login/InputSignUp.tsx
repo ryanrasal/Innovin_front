@@ -1,5 +1,4 @@
 import { UserCircle, Mail, KeyRound, MapPin, Phone } from "lucide-react";
-import React from "react";
 
 const inputSignUp = [
   {
@@ -15,7 +14,20 @@ const inputSignUp = [
     placeholder: "Pseudo",
     icon: <UserCircle />,
   },
+  {
+    name: "address",
+    label: "Adresse",
+    placeholder: "Adresse",
+    icon: <MapPin />,
+  },
   { name: "email", label: "Email", placeholder: "Email", icon: <Mail /> },
+
+  {
+    name: "phone",
+    label: "Numéro de Téléphone",
+    placeholder: "Numéro de téléphone",
+    icon: <Phone />,
+  },
   {
     name: "password",
     label: "Mot de passe",
@@ -27,18 +39,6 @@ const inputSignUp = [
     label: "passwordConfirm",
     placeholder: "Confirmer mot de passe",
     icon: <KeyRound />,
-  },
-  {
-    name: "address",
-    label: "Adresse",
-    placeholder: "Adresse",
-    icon: <MapPin />,
-  },
-  {
-    name: "phone",
-    label: "Numéro de Téléphone",
-    placeholder: "Numéro de téléphone",
-    icon: <Phone />,
   },
 ];
 

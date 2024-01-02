@@ -1,31 +1,38 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { useUserContext } from "../../services/Context/UserContext";
-import ModaleLogout from "./ModalLogout";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export default function Navbar() {
-  const [showModalConfirm, setShowModalConfirme] = useState(false);
-  const [open, setOpen] = useState(false);
   const { user } = useUserContext();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const Links = [
     { name: "Accueil", link: "/" },
-    { name: "Nos vins", link: "ourWines" },
-    { name: "Contact", link: "contact" },
+    { name: "Nos vins", link: "/ourWines" },
   ];
 
   const handleDeconnected = () => {
-    setShowModalConfirme(false);
-    setOpen(!open);
     localStorage.clear();
-    navigate("/");
-    window.location.reload();
+    setTimeout(() => {
+      navigate("/");
+      window.location.reload();
+    }, 500);
   };
 
   return (
-    <div className="shadow-md w-full h-[10vh]">
+    <div className="shadow-md w-full h-[8vh]">
       <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
         <div
           className="font-bold text-2xl cursor-pointer flex items-center font-[Poppins] 
@@ -47,10 +54,13 @@ export default function Navbar() {
           }`}
         >
           {Links.map((link) => (
-            <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
+            <li
+              onClick={() => setOpen(!open)}
+              key={link.name}
+              className="md:ml-8 text-xl md:my-0 my-7"
+            >
               <NavLink
                 to={link.link}
-                onClick={() => setOpen(!open)}
                 className="text-gray-800 hover:text-gray-600 hover:border-b hover:border-red-500 duration-300"
               >
                 {link.name}
@@ -58,20 +68,32 @@ export default function Navbar() {
             </li>
           ))}
           {!user ? (
-            <li className="md:ml-8 text-xl md:my-0 my-7">
-              <NavLink
+            <div className="md:flex">
+              <li
                 onClick={() => setOpen(!open)}
-                to="login"
-                className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+                className="md:ml-8 text-xl md:my-0 my-7"
               >
-                Connexion
-              </NavLink>
-            </li>
+                <NavLink
+                  to="contact"
+                  className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+                >
+                  Contact
+                </NavLink>
+              </li>
+              <li
+                onClick={() => setOpen(!open)}
+                className="md:ml-8 text-xl md:my-0 my-7"
+              >
+                <NavLink to="login">Connexion</NavLink>
+              </li>
+            </div>
           ) : user.role === "admin" ? (
             <>
-              <li className="md:ml-8 text-xl md:my-0 my-7">
+              <li
+                onClick={() => setOpen(!open)}
+                className="md:ml-8 text-xl md:my-0 my-7"
+              >
                 <NavLink
-                  onClick={() => setOpen(!open)}
                   to="/admin"
                   className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
                 >
@@ -79,20 +101,35 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="md:ml-8 text-xl md:my-0 my-7">
-                <button
-                  onClick={handleDeconnected}
-                  type="button"
-                  className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
-                >
-                  Deconnexion
-                </button>
+                <Dialog>
+                  <DialogTrigger>Deconnexion</DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                    <DialogTitle className="text-center font-medium mb-3 mx-10 md:mx-0">
+                        Voulez-vous vraiment vous deconnecter ?
+                      </DialogTitle>
+                      <DialogFooter className="flex">
+                        <Button
+                          variant="secondary"
+                          onClick={() => handleDeconnected()}
+                        >
+                          Oui
+                        </Button>
+                        <DialogClose asChild>
+                          <Button type="button" variant="destructive">
+                            Fermer
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
               </li>
             </>
           ) : (
             <>
               <li className="md:ml-8 text-xl md:my-0 my-7">
                 <NavLink
-                  onClick={() => setOpen(!open)}
                   to="/cart"
                   className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
                 >
@@ -100,23 +137,49 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="md:ml-8 text-xl md:my-0 my-7">
-                <button
-                  onClick={() => setShowModalConfirme(true)}
-                  type="button"
+                <NavLink
+                  to="profil"
                   className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
                 >
-                  Deconnexion
-                </button>
+                  Profil
+                </NavLink>
+              </li>
+              <li className="md:ml-8 text-xl md:my-0 my-7">
+                <NavLink
+                  to="contact"
+                  className="text-gray-800 hover:border-b hover:border-red-500  duration-300"
+                >
+                  Contact
+                </NavLink>
+              </li>
+              <li className="md:ml-8 text-xl md:my-0 my-7">
+                <Dialog>
+                  <DialogTrigger>Deconnexion</DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                    <DialogTitle className="text-center font-medium mb-3 mx-10 md:mx-0">
+                        Voulez-vous vraiment vous deconnecter ?
+                      </DialogTitle>
+                      <DialogFooter className="flex">
+                        <Button
+                          variant="secondary"
+                          onClick={() => handleDeconnected()}
+                        >
+                          Oui
+                        </Button>
+                        <DialogClose asChild>
+                          <Button type="button" variant="destructive">
+                            Fermer
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
               </li>
             </>
           )}
         </ul>
-        {showModalConfirm && (
-          <ModaleLogout
-            setShowModalConfirme={setShowModalConfirme}
-            handleDeconnected={handleDeconnected}
-          />
-        )}
       </div>
     </div>
   );

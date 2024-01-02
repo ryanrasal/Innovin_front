@@ -46,7 +46,7 @@ export default function ModalDeletedWine({
       onRequestClose={closeModal}
       contentLabel="Exemple de modale"
     >
-      <h2 className="mx-10 text-center">
+      <h2 className="mx-10 text-center uppercase">
         Voulez-vous vraiment supprimer {selectedWine?.quantity} bouteilles de
         votre panier ?
       </h2>
